@@ -1,0 +1,19 @@
+MONGODB_URI =
+
+#ROUTES
+API_V1 = /api/v1/
+
+#JWT
+API_SECRET = trestrdfgdsfgdsf
+JWT_EXPIRY = '4h'
+#Server
+PORT = 3001
+
+ 
+
+Bucket_accessKeyId = 
+Bucket_secretAccessKey = 
+Bucket_region = 
+Bucket_name = 
+
+FILE_UPLOAD_LIMIT_MB=.5
