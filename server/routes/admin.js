@@ -12,6 +12,6 @@ router.get('/get_profile_image', middleware.checkAdminToken, AdminController.get
 
 
 // Common Routes
-router.get('*', (req, res) => { res.json({ status: false, message: "Invalid Get Request" }) });
-router.post('*', (req, res) => { res.json({ status: false, message: "Invalid Post Request" }) });
+router.get('*', (req, res) => { res.status(404).send({ status: false, message: "Invalid Get Request" }) });
+router.post('*', (req, res) => { res.status(404).send({ status: false, message: "Invalid Post Request" }) });
 module.exports = router;
