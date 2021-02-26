@@ -27,7 +27,7 @@ exports.validateParams = (request, feilds) => {
         }
     }
     if (missingFeilds.length > 0) {
-        let response = showResponse(false, `Following fields are required : ${missingFeilds}`)
+        let response = this.showResponse(false, `Following fields are required : ${missingFeilds}`)
         return response;
     }
     let response = this.showResponse(true, ``)

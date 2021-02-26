@@ -13,7 +13,7 @@ exports.login = async(req, res) => {
     let requiredFields = ["email", "password"];
     let validator = helpers.validateParams(req, requiredFields);
     if (!validator.status) {
-        return res.json(
+        return res.status(402).send(
             helpers.showResponse(validator.status, validator.message)
         );
     }
@@ -47,35 +47,35 @@ exports.login = async(req, res) => {
 
         };
 
-        return res.json(helpers.showResponse(true, ADMIN_LOGIN_SUCCESS, data));
+        return res.status(200).send(helpers.showResponse(true, ADMIN_LOGIN_SUCCESS, data));
     }
-    return res.status(401).json(helpers.showResponse(false, ADMIN_LOGIN_FAILED));
+    return res.status(401).send(helpers.showResponse(false, ADMIN_LOGIN_FAILED));
 };
 
 
 exports.uploadProfileImage = async(req, res) => {
     singleUpload(req, res, async(err) => {
         if (err) {
-            return res.json(helpers.showResponse(false, "File size should be less then " + process.env.FILE_UPLOAD_LIMIT_MB + "MB"));
+            return res.status(402).send(helpers.showResponse(false, "File size should be less then " + process.env.FILE_UPLOAD_LIMIT_MB + "MB"));
         }
         if (!req.file) {
-            return res.status(400).json(helpers.showResponse(false, "Please select image file to proceed"));
+            return res.status(402).send(helpers.showResponse(false, "Please select image file to proceed"));
         }
 
         let admin_id = req.decoded.admin_id;
         let s3Path = req.file.s3Path;
 
         if (!admin_id) {
-            return res.json(helpers.showResponse(false, INVALID_ADMIN));
+            return res.status(400).send(helpers.showResponse(false, INVALID_ADMIN));
         }
 
         let result = await AdminService.updateProfileImage(admin_id, s3Path);
 
         if (result.status) {
             let data = { image_url: s3Path }
-            return res.json(helpers.showResponse(true, UPDATE_SUCCESS, data));
+            return res.status(200).send(helpers.showResponse(true, UPDATE_SUCCESS, data));
         } else {
-            return res.json(helpers.showResponse(false, UPDATE_FAILURE));
+            return res.status(401).send(helpers.showResponse(false, UPDATE_FAILURE));
         }
     });
 }
@@ -84,14 +84,14 @@ exports.uploadProfileImage = async(req, res) => {
 exports.getProfileImage = async(req, res) => {
     let admin_id = req.decoded.admin_id;
     if (!admin_id) {
-        return res.json(helpers.showResponse(false, INVALID_ADMIN));
+        return res.status(400).send(helpers.showResponse(false, INVALID_ADMIN));
     }
 
     let result = await AdminService.getAdminDataById(admin_id);
 
     if (result.status) {
-        return res.json(helpers.showResponse(true, PROFILE_IMAGE, { image_url: result.data.profile_image }));
+        return res.status(200).send(helpers.showResponse(true, PROFILE_IMAGE, { image_url: result.data.profile_image }));
     } else {
-        return res.json(helpers.showResponse(false, PROFILE_IMAGE_FAILED));
+        return res.status(401).send(helpers.showResponse(false, PROFILE_IMAGE_FAILED));
     }
 }

@@ -19,6 +19,7 @@ exports.getAdminByEmailPass = async(email, password) => {
         status: { $eq: 1 },
     };
     let result = await getSingleData(Admin, where, "-password");
+
     return result;
 };
 
